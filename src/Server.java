@@ -16,6 +16,7 @@ public class Server {
     private static int clientCount = 0;
     private static final int answerTime = 3000;
     private static boolean questionSent = false;
+    private static ArrayList<Thread> clients = new ArrayList<>();
 
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Quiz server started!\nAwaiting participants...");
@@ -25,11 +26,28 @@ public class Server {
         try {
             while (true) {
                 // Engage thread handling
-                Socket socket = listener.accept();
-                clientCount++;
+
                // Thread.sleep(1000);
-                Thread t = new Thread(new ClientHandler(socket));
-                t.start();
+                while (clientCount < 3) {
+                    Socket socket = listener.accept();
+                    clientCount++;
+                    Thread t = new Thread(new ClientHandler(socket));
+                    clients.add(t);
+                }
+
+
+
+
+                for (int i=0; i<clients.size(); i++) {
+                    clients.get(i).start();
+                }
+
+
+
+//                if (clientCount >= 3) {
+//                }
+//                t.start();
+
 
 
                 try {
@@ -85,6 +103,7 @@ public class Server {
 
             if (!entryIter.hasNext()){
                 sendMessage("Quiz has ended!");
+                break;
             }
 
         }
@@ -113,7 +132,7 @@ public class Server {
 
         public ClientHandler(Socket socket) {
             this.clientHolder = socket;
-            clientCount++;
+//            clientCount++;
 
             try {
                 InputStream i = clientHolder.getInputStream();
@@ -168,10 +187,10 @@ public class Server {
                 System.out.println(message);
 
             // Send to all clients
-            for (ObjectOutputStream writer : writers) {
-                writer.writeUTF(message);
-                writer.flush();
-            }
+//            for (ObjectOutputStream writer : writers) {
+//                writer.writeUTF(message);
+//                writer.flush();
+//            }
         }
 
         public void run() {
@@ -188,6 +207,7 @@ public class Server {
                     name = reader.readUTF();
                     //System.out.println("drg");
                     if (name == null) {
+//                        name = "koskhol" + clientCount;
                         return;
                     }
                     synchronized (names) {
