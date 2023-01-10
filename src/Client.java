@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Client implements Runnable {
     Socket mSocket;
-    int port = 6969;
+    int port = 8080;
     String serverAddress = "127.0.0.1";
     ObjectInputStream reader;
     ObjectOutputStream writer;
@@ -98,7 +98,7 @@ public class Client implements Runnable {
                     sa.start();
                     sa.join(15000);
                     String out = sa.myStop();
-                    System.out.println(out);
+                    //System.out.println(out);
                     writer.writeUTF(out);
                     writer.flush();
 

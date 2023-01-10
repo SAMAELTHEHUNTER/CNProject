@@ -9,16 +9,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class GameSetUp {
+public class SetUp {
 
     private JSONArray questions;
+    private JSONArray settings;
+    private int portCount = 0;
     private int questionCount = 0;
     private ArrayList<Integer> answers = new ArrayList<>();
+    private int serverPort;
+    private ArrayList<Integer> clientsPorts = new ArrayList<>();
 
-    public GameSetUp(){
+    public SetUp(){
         JSONParser jsonParser = new JSONParser();
         try {
             questions = (JSONArray) jsonParser.parse(new FileReader("questions.json"));
+            settings = (JSONArray) jsonParser.parse(new FileReader("users.json"));
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
@@ -26,6 +31,14 @@ public class GameSetUp {
 
     public ArrayList<Integer> getAnswers(){
         return answers;
+    }
+
+    public int getServerPort(){
+        return serverPort;
+    }
+
+    public ArrayList<Integer> getClientsPorts() {
+        return clientsPorts;
     }
 
     public Map<String, ArrayList<String>> loadQuestions(){
@@ -46,6 +59,24 @@ public class GameSetUp {
         // sendTime = System.currentTimeMillis();
         //sendToAll("question",question,options);
         return qo;
+    }
+
+    public void loadSettings() {
+        while (portCount < settings.size()){
+            JSONObject obj = (JSONObject) settings.get(portCount);
+            String type = obj.get("type").toString();
+            String port = obj.get("port").toString();
+            String name = obj.get("name").toString();
+
+            if (type.equals("host"))
+                serverPort = Integer.parseInt(port);
+
+            if (type.equals("client"))
+                clientsPorts.add(Integer.parseInt(port));
+
+            portCount++;
+        }
+
     }
 
 

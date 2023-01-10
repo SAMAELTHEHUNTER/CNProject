@@ -12,16 +12,20 @@ public class Server {
     private static Map.Entry<String, ArrayList<String>> currentEntry;
     private static ArrayList<Integer> answers = new ArrayList<>();
     private static ServerSocket listener;
-    private static final int PORT = 6969;
+    private static int S_PORT;
     private static int clientCount = 0;
-    private static final int answerTime = 3000;
+    private static final int answerTime = 15000;
     private static boolean questionSent = false;
     private static ArrayList<Thread> clients = new ArrayList<>();
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        SetUp setUp = new SetUp();
+        setUp.loadSettings();
+        S_PORT = setUp.getServerPort();
+
         System.out.println("Quiz server started!\nAwaiting participants...");
 
-        listener = new ServerSocket(PORT);
+        listener = new ServerSocket(S_PORT);
 
         try {
             while (true) {
@@ -33,14 +37,15 @@ public class Server {
                     clientCount++;
                     Thread t = new Thread(new ClientHandler(socket));
                     clients.add(t);
+                    t.start();
                 }
 
 
 
 
-                for (int i=0; i<clients.size(); i++) {
-                    clients.get(i).start();
-                }
+//                for (int i=0; i<clients.size(); i++) {
+//                    clients.get(i).start();
+//                }
 
 
 
@@ -51,7 +56,7 @@ public class Server {
 
 
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(15000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -81,7 +86,7 @@ public class Server {
     }
 
     private static void startQuiz() throws InterruptedException {
-        GameSetUp newGame = new GameSetUp();
+        SetUp newGame = new SetUp();
         qoMap = newGame.loadQuestions();
         answers = newGame.getAnswers();
         while (true){
@@ -99,7 +104,7 @@ public class Server {
 
             getScore();
 
-            Thread.sleep(15000);
+            Thread.sleep(5000);
 
             if (!entryIter.hasNext()){
                 sendMessage("Quiz has ended!");
@@ -117,7 +122,7 @@ public class Server {
                 System.out.println(users + " has " + names.get(users) + " point(s)!");
             }
         } catch (Exception exception) {
-            System.out.println("getScore failed");
+            System.out.println("Failed to update scoreboard :(");
         }
     }
 
