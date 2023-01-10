@@ -5,17 +5,20 @@ import java.util.Scanner;
 
 public class Client implements Runnable {
     Socket mSocket;
-    int port = 8080;
+    int serverPort;
     String serverAddress = "127.0.0.1";
     ObjectInputStream reader;
     ObjectOutputStream writer;
     Scanner scanner = new Scanner(System.in);
 
     public Client(){
+        SetUp setUp = new SetUp();
+        setUp.loadSettings();
+        serverPort = setUp.getServerPort();
 
 
         try {
-            mSocket = new Socket(serverAddress, port);
+            mSocket = new Socket(serverAddress, serverPort);
             System.out.println("connected to server ....");
             writer = new ObjectOutputStream(mSocket.getOutputStream());
             reader = new ObjectInputStream(mSocket.getInputStream());
