@@ -79,19 +79,20 @@ public class Client implements Runnable {
 
                     class sendAnswer extends Thread {
                         private String answer;
+                        private int tmp;
 
                         public sendAnswer() {
-                            answer = "-1";
+                            tmp = -1;
                         }
 
                         @Override
                         public void run() {
                             Scanner sc = new Scanner(System.in);
-                            int tmp = sc.nextInt();
-                            answer = Integer.toString(tmp);
+                            tmp = sc.nextInt();
                         }
 
                         public String myStop() {
+                            answer = Integer.toString(tmp);
                             super.stop();
                             return answer;
                         }
@@ -101,7 +102,7 @@ public class Client implements Runnable {
                     sa.start();
                     sa.join(15000);
                     String out = sa.myStop();
-                    //System.out.println(out);
+                    System.out.println("jalil: " + out);
                     writer.writeUTF(out);
                     writer.flush();
 

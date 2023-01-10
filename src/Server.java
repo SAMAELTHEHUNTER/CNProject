@@ -112,7 +112,6 @@ public class Server {
             }
 
         }
-
     }
 
     public static void getScore() {
@@ -154,10 +153,11 @@ public class Server {
 
         private void receive() throws IOException {
             String message = reader.readUTF();
+            System.out.println(message);
             if (message == null) {
                 return;
             }
-            if (!questionSent){
+            if (!questionSent && message != "-1"){
                 sendMessage("Please wait until the question is shown.\n");
             }
             else if (message.equals(currentEntry.getValue().get(1))){
