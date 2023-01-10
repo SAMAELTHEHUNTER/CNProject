@@ -73,9 +73,36 @@ public class Client implements Runnable {
                 }
                // scanner.nextInt();
                 try {
-                    writer.writeUTF(scanner.nextLine());
+
+                    class sendAnswer extends Thread {
+                        private String answer;
+
+                        public sendAnswer() {
+                            answer = "-1";
+                        }
+
+                        @Override
+                        public void run() {
+                            Scanner sc = new Scanner(System.in);
+                            int tmp = sc.nextInt();
+                            answer = Integer.toString(tmp);
+                        }
+
+                        public String myStop() {
+                            super.stop();
+                            return answer;
+                        }
+                    }
+
+                    sendAnswer sa = new sendAnswer();
+                    sa.start();
+                    sa.join(15000);
+                    String out = sa.myStop();
+                    System.out.println(out);
+                    writer.writeUTF(out);
                     writer.flush();
-                } catch (IOException e) {
+
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
                 //doest work if the client decides not to answer a question because scanner waits for input

@@ -99,7 +99,7 @@ public class Server {
 
             getScore();
 
-            Thread.sleep(5000);
+            Thread.sleep(15000);
 
             if (!entryIter.hasNext()){
                 sendMessage("Quiz has ended!");
