@@ -103,6 +103,10 @@ public class Client implements Runnable {
                     sa.join(15000);
                     String out = sa.myStop();
                     System.out.println("jalil: " + out);
+                    if (out.equals("-1")) {
+                        System.out.println("please enter: ");
+                    }
+                    System.out.println("jalil: " + out);
                     writer.writeUTF(out);
                     writer.flush();
 
