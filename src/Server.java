@@ -17,7 +17,7 @@ public class Server {
     private static final int answerTime = 15000;
     private static boolean questionSent = false;
     private static ArrayList<Thread> clients = new ArrayList<>();
-    public static boolean nameEntered = false;
+//    private static boolean nameEntered = false;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         SetUp setUp = new SetUp();
@@ -33,14 +33,13 @@ public class Server {
                 // Engage thread handling
 
                // Thread.sleep(1000);
-                while (clientCount < 3) {
+//                while (clientCount < 3) {
                     Socket socket = listener.accept();
                     Thread t = new Thread(new ClientHandler(socket));
                     clients.add(t);
                     t.start();
-                    while (!nameEntered);
                     clientCount++;
-                }
+//                }
 //                for (int i=0; i<clients.size(); i++) {
 //                    clients.get(i).start();
 //                }
@@ -57,7 +56,10 @@ public class Server {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                startQuiz();
+
+                if (clientCount >= 3) {
+                    startQuiz();
+                }
 
                // if (clientCount > 2)
                    // new sendQuestionThread().start();
@@ -220,12 +222,14 @@ public class Server {
                     synchronized (names) {
                         if (!names.containsKey(name)) {
                             names.put(name, 0);
+//                            nameEntered = true;
+//                            System.out.println(nameEntered);
                             break;
                         }
                     }
                 }
 
-                nameEntered = true;
+
                 //Server.addClientCount();
                 System.out.println(clientCount);
 
