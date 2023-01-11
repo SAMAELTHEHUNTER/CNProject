@@ -69,30 +69,32 @@ public class Client implements Runnable {
                 String question = str[1];
                 String[] options = str[2].split(",");
 
-                System.out.println("Question: " + question);
+                System.out.println("\nQuestion: " + question + "\n");
                 for (int i = 0; i < options.length; i++){
                     String option = options[i].substring(1, options[i].length() - 1);
                     System.out.println((i + 1) + ") " + option + "\n");
                 }
-               // scanner.nextInt();
+
+                System.out.println("ATTENTION : If you don't have an answer for the given question, please press Enter.\n");
                 try {
 
                     class sendAnswer extends Thread {
                         private String answer;
-                        private int tmp;
+                        private String tmp;
 
                         public sendAnswer() {
-                            tmp = -1;
+                            tmp = "-1";
                         }
 
                         @Override
                         public void run() {
                             Scanner sc = new Scanner(System.in);
-                            tmp = sc.nextInt();
+                            tmp = sc.nextLine();
                         }
 
                         public String myStop() {
-                            answer = Integer.toString(tmp);
+                            //answer = Integer.toString(tmp);
+                            answer = tmp;
                             super.stop();
                             return answer;
                         }
@@ -102,11 +104,11 @@ public class Client implements Runnable {
                     sa.start();
                     sa.join(15000);
                     String out = sa.myStop();
-                    System.out.println("jalil: " + out);
-                    if (out.equals("-1")) {
-                        System.out.println("please enter: ");
-                    }
-                    System.out.println("jalil: " + out);
+//                    System.out.println("jalil: " + out);
+//                    if (out.equals("-1")) {
+//                        System.out.println("please enter: ");
+//                    }
+//                    System.out.println("jalil: " + out);
                     writer.writeUTF(out);
                     writer.flush();
 
