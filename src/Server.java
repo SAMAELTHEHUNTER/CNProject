@@ -29,41 +29,75 @@ public class Server {
         listener = new ServerSocket(S_PORT);
 
         try {
-            while (true) {
-                // Engage thread handling
+            while(clientCount < 3) {
+                class accepter extends Thread {
+                    public int cc = 0;
 
-               // Thread.sleep(1000);
-//                while (clientCount < 3) {
-                    Socket socket = listener.accept();
-                    Thread t = new Thread(new ClientHandler(socket));
-                    clients.add(t);
-                    t.start();
-                    clientCount++;
-//                }
-//                for (int i=0; i<clients.size(); i++) {
-//                    clients.get(i).start();
-//                }
+                    @Override
+                    public void run() {
 
+                        while (true) {
+                            try {
+                                Socket socket = listener.accept();
+                                Thread t = new Thread(new ClientHandler(socket));
+                                clients.add(t);
+                                t.start();
+                                cc++;
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
 
-
-//                if (clientCount >= 3) {
-//                }
-//                t.start();
-                System.out.println("hello");
-
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    public int myStop() {
+                        super.stop();
+                        return cc;
+                    }
                 }
 
-                if (clientCount >= 3) {
-                    startQuiz();
-                }
-
-               // if (clientCount > 2)
-                   // new sendQuestionThread().start();
+                accepter ac = new accepter();
+                ;
+                ac.start();
+                ac.join(15000);
+                clientCount = ac.myStop();
             }
+
+            startQuiz();
+
+//            while (true) {
+//                // Engage thread handling
+//
+//               // Thread.sleep(1000);
+////                while (clientCount < 3) {
+//
+//
+//
+//
+////                }
+////                for (int i=0; i<clients.size(); i++) {
+////                    clients.get(i).start();
+////                }
+//
+//
+//
+////                if (clientCount >= 3) {
+////                }
+////                t.start();
+//                System.out.println("hello");
+//
+//                try {
+//                    Thread.sleep(10000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                if (clientCount >= 3) {
+//                    startQuiz();
+//                }
+//
+//               // if (clientCount > 2)
+//                   // new sendQuestionThread().start();
+//            }
         }
         finally {
             listener.close();
