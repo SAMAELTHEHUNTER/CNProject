@@ -17,6 +17,7 @@ public class Server {
     private static final int answerTime = 15000;
     private static boolean questionSent = false;
     private static ArrayList<Thread> clients = new ArrayList<>();
+    public static boolean nameEntered = false;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         SetUp setUp = new SetUp();
@@ -34,10 +35,11 @@ public class Server {
                // Thread.sleep(1000);
                 while (clientCount < 3) {
                     Socket socket = listener.accept();
-                    clientCount++;
                     Thread t = new Thread(new ClientHandler(socket));
                     clients.add(t);
                     t.start();
+                    while (!nameEntered);
+                    clientCount++;
                 }
 //                for (int i=0; i<clients.size(); i++) {
 //                    clients.get(i).start();
@@ -48,8 +50,7 @@ public class Server {
 //                if (clientCount >= 3) {
 //                }
 //                t.start();
-
-
+                System.out.println("hello");
 
                 try {
                     Thread.sleep(10000);
@@ -68,6 +69,9 @@ public class Server {
 
     }
 
+    public static void addClientCount(){
+        clientCount++;
+    }
     //sends a message to every connected socket in a loop
     private static void sendMessage(String message) {
         for(ObjectOutputStream writer: writers) {
@@ -153,6 +157,8 @@ public class Server {
             if (message == null) {
                 return;
             }
+
+
             if (!questionSent && message != "-1"){
                 sendMessage("Please wait until the question is shown.\n");
             }
@@ -218,6 +224,10 @@ public class Server {
                         }
                     }
                 }
+
+                nameEntered = true;
+                //Server.addClientCount();
+                System.out.println(clientCount);
 
                 sendMessage(name + " has joined the server!");
                 System.out.println(name + " has joined the server!");
