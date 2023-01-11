@@ -39,10 +39,6 @@ public class Server {
                     clients.add(t);
                     t.start();
                 }
-
-
-
-
 //                for (int i=0; i<clients.size(); i++) {
 //                    clients.get(i).start();
 //                }
@@ -56,7 +52,7 @@ public class Server {
 
 
                 try {
-                    Thread.sleep(15000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

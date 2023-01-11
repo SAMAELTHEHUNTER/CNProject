@@ -46,12 +46,6 @@ public class Client implements Runnable {
                 String text = reader.readUTF();
                 showMessage(text);
 
-               // scanner.nextLine();
-//                if(scanner.hasNext()){
-//                    writer.writeUTF(scanner.nextLine());
-//                    writer.flush();
-//                }
-               // decode(text);
             }
             catch (IOException e) {
                 System.out.println(e);

@@ -57,7 +57,7 @@ public class SetUp {
             questionCount ++;
         }
         // sendTime = System.currentTimeMillis();
-        //sendToAll("question",question,options);
+
         return qo;
     }
 
