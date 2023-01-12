@@ -162,7 +162,7 @@ public class Server {
     }
 
 
-    private static class ClientHandler implements Runnable{
+    private static class ClientHandler implements Runnable {
         private String name;
         private Socket clientHolder;
         private Server serverHolder;
@@ -172,8 +172,6 @@ public class Server {
 
         public ClientHandler(Socket socket) {
             this.clientHolder = socket;
-//            clientCount++;
-
             try {
                 InputStream i = clientHolder.getInputStream();
 
@@ -193,7 +191,6 @@ public class Server {
             if (message == null) {
                 return;
             }
-
 
             if (!questionSent && message != "-1"){
                 sendMessage("Please wait until the question is shown.\n");
@@ -238,8 +235,6 @@ public class Server {
 
         public void run() {
             try {
-
-
                // System.out.println("1");
                 writer.writeUTF(" Please enter your name.");
                 writer.flush();
@@ -262,8 +257,6 @@ public class Server {
                         }
                     }
                 }
-
-
                 //Server.addClientCount();
                 System.out.println(clientCount);
 
