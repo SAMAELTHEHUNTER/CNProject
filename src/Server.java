@@ -5,8 +5,10 @@ import java.util.*;
 
 public class Server {
 
-    private static HashSet<ObjectOutputStream> writers = new HashSet<ObjectOutputStream>();
+//    private static HashSet<ObjectOutputStream> writers = new HashSet<ObjectOutputStream>();
+    private static Map<Integer, ObjectOutputStream> writers = new HashMap<>();
     private static Map<String, Integer> names = new HashMap<>();
+    private static ArrayList<String> namesPlaceHolder = new ArrayList<>();
     private static Map<String, ArrayList<String>> qoMap = new HashMap<>();
     private static Iterator<Map.Entry<String, ArrayList<String>>> entryIter = null;
     private static Map.Entry<String, ArrayList<String>> currentEntry;
@@ -14,7 +16,7 @@ public class Server {
     private static ServerSocket listener;
     private static int S_PORT;
     private static int clientCount = 0;
-    private static final int answerTime = 15000;
+    private static final int answerTime = 20000;
     private static boolean questionSent = false;
     private static ArrayList<Thread> clients = new ArrayList<>();
 //    private static boolean nameEntered = false;
@@ -39,7 +41,7 @@ public class Server {
                         while (true) {
                             try {
                                 Socket socket = listener.accept();
-                                Thread t = new Thread(new ClientHandler(socket));
+                                Thread t = new Thread(new ClientHandler(socket, cc));
                                 clients.add(t);
                                 t.start();
                                 cc++;
@@ -110,7 +112,8 @@ public class Server {
     }
     //sends a message to every connected socket in a loop
     private static void sendMessage(String message) {
-        for(ObjectOutputStream writer: writers) {
+        for(int i = 0; i < writers.size(); i++) {
+            ObjectOutputStream writer = writers.get(i);
             try {
                 writer.writeUTF(message);
                 writer.flush();
@@ -119,6 +122,21 @@ public class Server {
             }
 
         }
+    }
+
+    private static void sendPrivateMessage(String message, String receiver) {
+        //System.out.println(namesPlaceHolder.contains(receiver));
+        int nameIndex = namesPlaceHolder.indexOf(receiver);
+        //System.out.println(nameIndex);
+        ObjectOutputStream pMWriter = writers.get(nameIndex);
+
+        try {
+            pMWriter.writeUTF(message);
+            pMWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private static void startQuiz() throws InterruptedException {
@@ -170,20 +188,27 @@ public class Server {
         ObjectOutputStream writer;
 
 
-        public ClientHandler(Socket socket) {
+        public ClientHandler(Socket socket, int count) {
             this.clientHolder = socket;
             try {
                 InputStream i = clientHolder.getInputStream();
 
                 reader = new ObjectInputStream(i);
                 writer = new ObjectOutputStream(clientHolder.getOutputStream());
-                writers.add(writer);
+                writers.put(count, writer);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             //start();
         }
 
+        private String extractReceiverName(String input){
+            return input.substring(input.indexOf("message to") + 11, input.indexOf(":"));
+        }
+
+        private String extractSenderName(String input){
+            return input.substring(0, input.indexOf("message to"));
+        }
 
         private void receive() throws IOException {
             String message = reader.readUTF();
@@ -192,7 +217,17 @@ public class Server {
                 return;
             }
 
-            if (!questionSent && message != "-1"){
+            if (message.contains("message to")){
+                String receiver = extractReceiverName(message);
+                String sender = extractSenderName(message);
+                System.out.println(receiver);
+                String[] content = message.split(":");
+                sendPrivateMessage("PMessage/" + content[1] + "/" + sender, receiver);
+                //return;
+            }
+
+
+            if (!questionSent && !message.equals("-1")){
                 sendMessage("Please wait until the question is shown.\n");
             }
             else if (message.equals(currentEntry.getValue().get(1))){
@@ -253,12 +288,18 @@ public class Server {
                             names.put(name, 0);
 //                            nameEntered = true;
 //                            System.out.println(nameEntered);
+                        }
+                    }
+                    synchronized (namesPlaceHolder) {
+                        if (!namesPlaceHolder.contains(name)) {
+                            namesPlaceHolder.add(name);
                             break;
                         }
                     }
                 }
+
                 //Server.addClientCount();
-                System.out.println(clientCount);
+               // System.out.println(clientCount);
 
                 sendMessage(name + " has joined the server!");
                 System.out.println(name + " has joined the server!");

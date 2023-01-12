@@ -10,6 +10,9 @@ public class Client implements Runnable {
     ObjectInputStream reader;
     ObjectOutputStream writer;
     Scanner scanner = new Scanner(System.in);
+    public static final String GREEN = "\033[0;32m";
+    public static final String RED = "\u001B[31m";
+    public static final String RESET = "\033[0m";
 
     public Client(){
         SetUp setUp = new SetUp();
@@ -51,6 +54,16 @@ public class Client implements Runnable {
                 System.out.println(e);
             }
 
+//            Thread thread= new Thread(() -> {
+//                Scanner scanner = new Scanner(System.in);
+//                String answer = scanner.nextLine();
+//                if (answer.startsWith("start chat with")){
+//
+//                }
+//            });
+//
+//            thread.start();
+
         }
 
     }
@@ -69,7 +82,7 @@ public class Client implements Runnable {
                     System.out.println((i + 1) + ") " + option + "\n");
                 }
 
-                System.out.println("ATTENTION : If you don't have an answer for the given question, please press Enter.\n");
+                System.out.println(RED + "ATTENTION : If you don't have an answer for the given question, please press Enter.\n" + RESET);
                 try {
 
                     class sendAnswer extends Thread {
@@ -111,6 +124,14 @@ public class Client implements Runnable {
                 }
                 //doest work if the client decides not to answer a question because scanner waits for input
 
+                break;
+
+            case "PMessage":
+                //System.out.println("helloooooooooo");
+                String message = str[1];
+                String sender = str[2];
+                System.out.println(GREEN +  sender + "says " + message + "\n" + RESET);
+                //System.out.println(sender + "says " + message + "\n");
                 break;
 
             default:
