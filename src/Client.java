@@ -3,6 +3,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+
+//SENDERNAME message to RECIEVERNAME:message
 public class Client implements Runnable {
     Socket mSocket;
     int serverPort;

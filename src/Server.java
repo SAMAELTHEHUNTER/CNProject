@@ -58,7 +58,6 @@ public class Server {
                 }
 
                 accepter ac = new accepter();
-                ;
                 ac.start();
                 ac.join(30000);
                 clientCount = ac.myStop();
