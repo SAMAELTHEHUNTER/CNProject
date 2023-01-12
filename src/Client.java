@@ -46,11 +46,12 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
+
+
         while (true) {
             try {
                 String text = reader.readUTF();
                 showMessage(text);
-
             }
             catch (IOException e) {
                 System.out.println(e);
@@ -86,7 +87,6 @@ public class Client implements Runnable {
 
                 System.out.println(RED + "ATTENTION : If you don't have an answer for the given question, please press Enter.\n" + RESET);
                 try {
-
                     class sendAnswer extends Thread {
                         private String answer;
                         private String tmp;
@@ -108,18 +108,21 @@ public class Client implements Runnable {
                             return answer;
                         }
                     }
-
                     sendAnswer sa = new sendAnswer();
                     sa.start();
                     sa.join(15000);
                     String out = sa.myStop();
+                    writer.writeUTF(out);
+                    writer.flush();
+
+
+
 //                    System.out.println("jalil: " + out);
 //                    if (out.equals("-1")) {
 //                        System.out.println("please enter: ");
 //                    }
 //                    System.out.println("jalil: " + out);
-                    writer.writeUTF(out);
-                    writer.flush();
+
 
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
