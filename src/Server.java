@@ -258,8 +258,11 @@ public class Server {
             }
 
              */
-            else
+            else{
                 System.out.println(message);
+                sendMessage("Please use correct syntax\n");
+            }
+
 
             // Send to all clients
 //            for (ObjectOutputStream writer : writers) {
