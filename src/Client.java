@@ -104,7 +104,7 @@ public class Client implements Runnable {
                         public String myStop() {
                             //answer = Integer.toString(tmp);
                             answer = tmp;
-                            super.stop();
+//                            super.stop();
                             return answer;
                         }
                     }
