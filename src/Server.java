@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Server {
 
-//    private static HashSet<ObjectOutputStream> writers = new HashSet<ObjectOutputStream>();
+    //    private static HashSet<ObjectOutputStream> writers = new HashSet<ObjectOutputStream>();
     private static Map<Integer, ObjectOutputStream> writers = new HashMap<>();
     private static Map<String, Integer> names = new HashMap<>();
     private static ArrayList<String> namesPlaceHolder = new ArrayList<>();
@@ -29,41 +29,40 @@ public class Server {
         System.out.println("Quiz server started!\nAwaiting participants...");
 
         listener = new ServerSocket(S_PORT);
+        while (clientCount < 3) {
+            class accepter extends Thread {
+                public int cc = 0;
 
-        try {
-            while(clientCount < 3) {
-                class accepter extends Thread {
-                    public int cc = 0;
+                @Override
+                public void run() {
 
-                    @Override
-                    public void run() {
-
-                        while (true) {
-                            try {
-                                Socket socket = listener.accept();
-                                Thread t = new Thread(new ClientHandler(socket, cc));
-                                clients.add(t);
-                                t.start();
-                                cc++;
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                    while (true) {
+                        try {
+                            Socket socket = listener.accept();
+                            Thread t = new Thread(new ClientHandler(socket, cc));
+                            clients.add(t);
+                            t.start();
+                            cc++;
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    }
-
-                    public int myStop() {
-                        super.stop();
-                        return cc;
+                        //            listener.close();
                     }
                 }
 
-                accepter ac = new accepter();
-                ac.start();
-                ac.join(30000);
-                clientCount = ac.myStop();
+                public int myStop() {
+                    super.stop();
+                    return cc;
+                }
             }
 
-            startQuiz();
+            accepter ac = new accepter();
+            ac.start();
+            ac.join(30000);
+            clientCount = ac.myStop();
+        }
+
+        startQuiz();
 
 //            while (true) {
 //                // Engage thread handling
@@ -99,19 +98,19 @@ public class Server {
 //               // if (clientCount > 2)
 //                   // new sendQuestionThread().start();
 //            }
-        }
-        finally {
-            listener.close();
-        }
+
+
+
 
     }
 
-    public static void addClientCount(){
+    public static void addClientCount() {
         clientCount++;
     }
+
     //sends a message to every connected socket in a loop
     private static void sendMessage(String message) {
-        for(int i = 0; i < writers.size(); i++) {
+        for (int i = 0; i < writers.size(); i++) {
             ObjectOutputStream writer = writers.get(i);
             try {
                 writer.writeUTF(message);
@@ -142,9 +141,9 @@ public class Server {
         SetUp newGame = new SetUp();
         qoMap = newGame.loadQuestions();
         answers = newGame.getAnswers();
-        while (true){
+        while (true) {
 
-            if (entryIter == null ) {
+            if (entryIter == null) {
                 entryIter = qoMap.entrySet().iterator();
             }
             currentEntry = entryIter.next();
@@ -159,7 +158,7 @@ public class Server {
 
             Thread.sleep(5000);
 
-            if (!entryIter.hasNext()){
+            if (!entryIter.hasNext()) {
                 sendMessage("Quiz has ended!");
                 break;
             }
@@ -169,7 +168,7 @@ public class Server {
 
     public static void getScore() {
         try {
-            for(String users : names.keySet()) {
+            for (String users : names.keySet()) {
                 sendMessage(users + " has " + names.get(users) + " point(s)!");
                 System.out.println(users + " has " + names.get(users) + " point(s)!");
             }
@@ -201,22 +200,22 @@ public class Server {
             //start();
         }
 
-        private String extractReceiverName(String input){
+        private String extractReceiverName(String input) {
             return input.substring(input.indexOf("message to") + 11, input.indexOf(":"));
         }
 
-        private String extractSenderName(String input){
+        private String extractSenderName(String input) {
             return input.substring(0, input.indexOf("message to"));
         }
 
         private void receive() throws IOException {
             String message = reader.readUTF();
-            System.out.println(message);
+            System.out.println("masage:  " + message);
             if (message == null) {
                 return;
             }
 
-            if (message.contains("message to")){
+            if (message.contains("message to")) {
                 String receiver = extractReceiverName(message);
                 String sender = extractSenderName(message);
                 System.out.println(receiver);
@@ -226,11 +225,10 @@ public class Server {
             }
 
 
-            if (!questionSent && !message.equals("-1")){
+            if (!questionSent && !message.equals("-1")) {
                 sendMessage("Please wait until the question is shown.\n");
-            }
-            else if (message.equals(currentEntry.getValue().get(1))){
-            //    sendMessage(name + " answered correctly!");
+            } else if (message.equals(currentEntry.getValue().get(1))) {
+                //    sendMessage(name + " answered correctly!");
                 System.out.println(name + " answered correctly!");
                 //update score
                 names.put(name, names.get(name) + 1);
@@ -257,7 +255,7 @@ public class Server {
             }
 
              */
-            else{
+            else {
                 System.out.println(message);
                 sendMessage("Please use correct syntax\n");
             }
@@ -272,11 +270,11 @@ public class Server {
 
         public void run() {
             try {
-               // System.out.println("1");
+                // System.out.println("1");
                 writer.writeUTF(" Please enter your name.");
                 writer.flush();
 
-               // name = reader.readLine();
+                // name = reader.readLine();
                 // Check username
                 while (true) {
                     name = reader.readUTF();
@@ -301,7 +299,7 @@ public class Server {
                 }
 
                 //Server.addClientCount();
-               // System.out.println(clientCount);
+                // System.out.println(clientCount);
 
                 sendMessage(name + " has joined the server!");
                 System.out.println(name + " has joined the server!");
@@ -317,8 +315,7 @@ public class Server {
 
             } catch (IOException e) {
                 System.out.println(e);
-            }
-            finally {
+            } finally {
                 if (name != null) {
                     names.remove(name);
                 }
@@ -335,5 +332,5 @@ public class Server {
 
     }
 
-    }
+}
 

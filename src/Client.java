@@ -99,6 +99,7 @@ public class Client implements Runnable {
                         public void run() {
                             Scanner sc = new Scanner(System.in);
                             tmp = sc.nextLine();
+//                            System.out.println(tmp);
                         }
 
                         public String myStop() {
@@ -109,11 +110,12 @@ public class Client implements Runnable {
                         }
                     }
                     sendAnswer sa = new sendAnswer();
-                    sa.start();
-                    sa.join(15000);
-                    String out = sa.myStop();
-                    writer.writeUTF(out);
-                    writer.flush();
+                        sa.start();
+                        sa.join(15000);
+                        String out = sa.myStop();
+                        writer.writeUTF(out);
+                        writer.flush();
+
 
 
 
