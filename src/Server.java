@@ -141,28 +141,84 @@ public class Server {
         SetUp newGame = new SetUp();
         qoMap = newGame.loadQuestions();
         answers = newGame.getAnswers();
-        while (true) {
 
-            if (entryIter == null) {
-                entryIter = qoMap.entrySet().iterator();
+        Thread qthread = new Thread(new Quiz());
+        qthread.start();
+
+//       while (true){
+//           while (questionSent){
+//               synchronized (qthread){
+//                   qthread.wait(answerTime);
+//               }
+//
+//               questionSent = false;
+//           }
+//
+//           getScore();
+//           synchronized (qthread){
+//               qthread.wait(5000);
+//           }
+//       }
+//        while (true) {
+//
+//            if (entryIter == null) {
+//                entryIter = qoMap.entrySet().iterator();
+//            }
+//            currentEntry = entryIter.next();
+//
+//            sendMessage("Question/" + currentEntry.getKey() + "/" + currentEntry.getValue().get(0));
+//            questionSent = true;
+//
+//           // Thread.sleep(answerTime);
+//            questionSent = false;
+//
+//            getScore();
+//
+//            Thread.sleep(5000);
+//
+//            if (!entryIter.hasNext()) {
+//                sendMessage("Quiz has ended!");
+//                break;
+//            }
+//
+//        }
+    }
+
+    private static class Quiz implements Runnable{
+
+        @Override
+        public void run() {
+            while (true) {
+
+                if (entryIter == null) {
+                    entryIter = qoMap.entrySet().iterator();
+                }
+                currentEntry = entryIter.next();
+
+                sendMessage("Question/" + currentEntry.getKey() + "/" + currentEntry.getValue().get(0));
+                questionSent = true;
+
+                try {
+                    Thread.sleep(answerTime);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                questionSent = false;
+
+                getScore();
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (!entryIter.hasNext()) {
+                    sendMessage("Quiz has ended!");
+                    break;
+                }
+
             }
-            currentEntry = entryIter.next();
-
-            sendMessage("Question/" + currentEntry.getKey() + "/" + currentEntry.getValue().get(0));
-            questionSent = true;
-
-            Thread.sleep(answerTime);
-            questionSent = false;
-
-            getScore();
-
-            Thread.sleep(5000);
-
-            if (!entryIter.hasNext()) {
-                sendMessage("Quiz has ended!");
-                break;
-            }
-
         }
     }
 
@@ -218,17 +274,14 @@ public class Server {
             if (message.contains("message to")) {
                 String receiver = extractReceiverName(message);
                 String sender = extractSenderName(message);
-                System.out.println(receiver);
                 String[] content = message.split(":");
                 sendPrivateMessage("PMessage/" + content[1] + "/" + sender, receiver);
-                //return;
             }
 
 
             else if (!questionSent && !message.equals("-1")) {
                 sendMessage("Please wait until the question is shown.\n");
             } else if (message.equals(currentEntry.getValue().get(1))) {
-                //    sendMessage(name + " answered correctly!");
                 System.out.println(name + " answered correctly!");
                 //update score
                 names.put(name, names.get(name) + 1);
@@ -257,15 +310,10 @@ public class Server {
              */
             else {
                 System.out.println(message);
-                sendMessage("Please use correct syntax\n");
+                if (!message.equals(""))
+                    sendMessage("Please use correct syntax\n");
             }
 
-
-            // Send to all clients
-//            for (ObjectOutputStream writer : writers) {
-//                writer.writeUTF(message);
-//                writer.flush();
-//            }
         }
 
         public void run() {
@@ -312,6 +360,22 @@ public class Server {
                     receive();
                 }
 
+//                while (true){
+//                    Thread thread = new Thread(() -> {
+//                        try {
+//                            System.out.println("fuckkkkkkkkk");
+//                            receive();
+//                            System.out.println("noooooooooo");
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    });
+//
+//                    thread.start();
+//                    thread.join();
+//
+//                }
 
             } catch (IOException e) {
                 System.out.println(e);
