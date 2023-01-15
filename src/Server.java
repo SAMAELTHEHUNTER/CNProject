@@ -225,7 +225,7 @@ public class Server {
             }
 
 
-            if (!questionSent && !message.equals("-1")) {
+            else if (!questionSent && !message.equals("-1")) {
                 sendMessage("Please wait until the question is shown.\n");
             } else if (message.equals(currentEntry.getValue().get(1))) {
                 //    sendMessage(name + " answered correctly!");
