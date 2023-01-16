@@ -47,7 +47,7 @@ public class Client implements Runnable {
            }
         });
 
-            thread.start();
+        thread.start();
 
 
             try {
@@ -115,6 +115,7 @@ public class Client implements Runnable {
 
 
         while (true) {
+
             try {
                 String text = reader.readUTF();
                 showMessage(text);
