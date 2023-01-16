@@ -29,6 +29,7 @@ public class Client implements Runnable {
            try {
                String userInput;
                while ((userInput = scanner.readLine()) != null) {
+               //while ((userInput = scanner.nextLine()) != null) {
                    writer.writeUTF(userInput);
                    writer.flush();
                    // System.out.println("echo: " + in.readLine());
@@ -52,8 +53,8 @@ public class Client implements Runnable {
 
             //Thread thread = new Thread(reader);
 
-            writer.writeUTF(scanner.readLine());
-            writer.flush();
+//            writer.writeUTF(scanner.readLine());
+//            writer.flush();
 //
 //            msg = reader.readUTF();
 //            System.out.println(msg);
@@ -167,6 +168,7 @@ public class Client implements Runnable {
 
             case "Question":
                 scanner = new BufferedReader(new InputStreamReader(System.in));
+                //scanner = new Scanner(System.in);
                 answered = false;
                 String question = str[1];
                 String[] options = str[2].split(",");
