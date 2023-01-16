@@ -25,13 +25,21 @@ public class Client implements Runnable {
         setUp.loadSettings();
         serverPort = setUp.getServerPort();
 
-        Thread thread= new Thread(() -> {
+        Thread thread = new Thread(() -> {
            try {
                String userInput;
                while ((userInput = scanner.readLine()) != null) {
                //while ((userInput = scanner.nextLine()) != null) {
-                   writer.writeUTF(userInput);
-                   writer.flush();
+
+                   if (!userInput.matches("-?\\d+") || !answered){
+
+                       if (userInput.matches("-?\\d+") && !answered)
+                           answered = true;
+
+                       writer.writeUTF(userInput);
+                       writer.flush();
+                   }
+
                    // System.out.println("echo: " + in.readLine());
                }
            } catch (IOException e) {
@@ -64,6 +72,18 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
 
+    }
+
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        // only got here if we didn't return false
+        return true;
     }
 
 //    class sendAnswer extends Thread {
