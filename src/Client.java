@@ -64,14 +64,6 @@ public class Client implements Runnable {
             System.out.println(YELLOW + "ATTENTION : If you want to be given a name by the server, simply press Enter.\n" + RESET);
 
 
-            //Thread thread = new Thread(reader);
-
-//            writer.writeUTF(scanner.readLine());
-//            writer.flush();
-//
-//            msg = reader.readUTF();
-//            System.out.println(msg);
-
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -91,30 +83,6 @@ public class Client implements Runnable {
         return true;
     }
 
-//    class sendAnswer extends Thread {
-//        private String answer;
-//        private String tmp;
-//
-//        public sendAnswer() {
-//            tmp = "-1";
-//        }
-//
-//        @Override
-//        public void run() {
-//            Scanner sc = new Scanner(System.in);
-//            tmp = sc.nextLine();
-//
-////                            System.out.println(tmp);
-//        }
-//
-//        public String myStop() {
-//            //answer = Integer.toString(tmp);
-//            answer = tmp;
-////                            super.stop();
-//            return answer;
-//        }
-//    }
-
     @Override
     public void run() {
 
@@ -128,7 +96,6 @@ public class Client implements Runnable {
             catch (IOException e) {
                 System.out.println(e);
             }
-
 
         }
 
@@ -146,128 +113,22 @@ public class Client implements Runnable {
                 if (sender.equals("server "))
                     System.out.println(RED + "[Server] : " + message + RESET);
                 else
-                    System.out.println(GREEN +  sender + "says " + message + "\n" + RESET);
+                    System.out.println(GREEN + "\n" + sender + "says " + message + "\n" + RESET);
 
-//                try {
-//                    class sendAnswer extends Thread {
-//                        private String answer;
-//                        private String tmp;
-//
-//                        public sendAnswer() {
-//                            tmp = "-1";
-//                        }
-//
-//                        @Override
-//                        public void run() {
-//                            Scanner sc = new Scanner(System.in);
-//                            tmp = sc.nextLine();
-////                            System.out.println(tmp);
-//                        }
-//
-//                        public String myStop() {
-//                            //answer = Integer.toString(tmp);
-//                            answer = tmp;
-////                            super.stop();
-//                            return answer;
-//                        }
-//                    }
-//                    sendAnswer sa = new sendAnswer();
-//                    sa.start();
-//                    sa.join();
-//                    String out = sa.myStop();
-//                    writer.writeUTF(out);
-//                    writer.flush();
-//
-//
-//
-//
-////                    System.out.println("jalil: " + out);
-////                    if (out.equals("-1")) {
-////                        System.out.println("please enter: ");
-////                    }
-////                    System.out.println("jalil: " + out);
-//
-//
-//                } catch (IOException | InterruptedException e) {
-//                    e.printStackTrace();
-//                }
 
                 break;
 
             case "Question":
                 scanner = new BufferedReader(new InputStreamReader(System.in));
-                //scanner = new Scanner(System.in);
                 answered = false;
                 String question = str[1];
                 String[] options = str[2].split(",");
 
-                System.out.println("\nQuestion: " + question + "\n");
+                System.out.println("\nQuestion: " + question);
                 for (int i = 0; i < options.length; i++){
                     String option = options[i].substring(1, options[i].length() - 1);
-                    System.out.println((i + 1) + ") " + option + "\n");
+                    System.out.println((i + 1) + ") " + option);
                 }
-
-//                String userInput;
-//                while ((userInput = scanner.readLine()) != null) {
-//                    writer.writeUTF(userInput);
-//                    writer.flush();
-//                   // System.out.println("echo: " + in.readLine());
-//                }
-
-
-//                while (wasAMessage && !answered){
-//                    try {
-//                        class sendAnswer extends Thread {
-//                            private String answer;
-//                            private String tmp;
-//
-//                            public sendAnswer() {
-//                                tmp = "-1";
-//                            }
-//
-//                            @Override
-//                            public void run() {
-//                                Scanner sc = new Scanner(System.in);
-//                                tmp = sc.nextLine();
-////                            System.out.println(tmp);
-//                            }
-//
-//                            public String myStop() {
-//                                //answer = Integer.toString(tmp);
-//                                answer = tmp;
-////                            super.stop();
-//                                return answer;
-//                            }
-//                        }
-//                        sendAnswer sa = new sendAnswer();
-//                        sa.start();
-//                        sa.join();
-//                        String out = sa.myStop();
-//                        writer.writeUTF(out);
-//                        writer.flush();
-//
-//                        if (out.contains("message to")){
-//                            wasAMessage = true;
-//                        }
-//                        else{
-//                            answered = true;
-//                            wasAMessage = false;
-//                        }
-//
-//
-//
-//
-////                    System.out.println("jalil: " + out);
-////                    if (out.equals("-1")) {
-////                        System.out.println("please enter: ");
-////                    }
-////                    System.out.println("jalil: " + out);
-//
-//
-//                    } catch (IOException | InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
 
                 break;
 

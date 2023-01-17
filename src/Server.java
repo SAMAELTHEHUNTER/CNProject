@@ -5,7 +5,6 @@ import java.util.*;
 
 public class Server {
 
-    //    private static HashSet<ObjectOutputStream> writers = new HashSet<ObjectOutputStream>();
     private static Map<Integer, ObjectOutputStream> writers = new HashMap<>();
     private static Map<String, Integer> names = new HashMap<>();
     private static ArrayList<String> namesPlaceHolder = new ArrayList<>();
@@ -19,7 +18,6 @@ public class Server {
     private static final int answerTime = 20000;
     private static boolean questionSent = false;
     private static ArrayList<Thread> clients = new ArrayList<>();
-//    private static boolean nameEntered = false;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         SetUp setUp = new SetUp();
@@ -64,48 +62,6 @@ public class Server {
 
         startQuiz();
 
-//            while (true) {
-//                // Engage thread handling
-//
-//               // Thread.sleep(1000);
-////                while (clientCount < 3) {
-//
-//
-//
-//
-////                }
-////                for (int i=0; i<clients.size(); i++) {
-////                    clients.get(i).start();
-////                }
-//
-//
-//
-////                if (clientCount >= 3) {
-////                }
-////                t.start();
-//                System.out.println("hello");
-//
-//                try {
-//                    Thread.sleep(10000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                if (clientCount >= 3) {
-//                    startQuiz();
-//                }
-//
-//               // if (clientCount > 2)
-//                   // new sendQuestionThread().start();
-//            }
-
-
-
-
-    }
-
-    public static void addClientCount() {
-        clientCount++;
     }
 
     //sends a message to every connected socket in a loop
@@ -123,9 +79,7 @@ public class Server {
     }
 
     private static void sendPrivateMessage(String message, String receiver) {
-        //System.out.println(namesPlaceHolder.contains(receiver));
         int nameIndex = namesPlaceHolder.indexOf(receiver);
-        //System.out.println(nameIndex);
         ObjectOutputStream pMWriter = writers.get(nameIndex);
 
         try {
@@ -145,43 +99,6 @@ public class Server {
         Thread qthread = new Thread(new Quiz());
         qthread.start();
 
-//       while (true){
-//           while (questionSent){
-//               synchronized (qthread){
-//                   qthread.wait(answerTime);
-//               }
-//
-//               questionSent = false;
-//           }
-//
-//           getScore();
-//           synchronized (qthread){
-//               qthread.wait(5000);
-//           }
-//       }
-//        while (true) {
-//
-//            if (entryIter == null) {
-//                entryIter = qoMap.entrySet().iterator();
-//            }
-//            currentEntry = entryIter.next();
-//
-//            sendMessage("Question/" + currentEntry.getKey() + "/" + currentEntry.getValue().get(0));
-//            questionSent = true;
-//
-//           // Thread.sleep(answerTime);
-//            questionSent = false;
-//
-//            getScore();
-//
-//            Thread.sleep(5000);
-//
-//            if (!entryIter.hasNext()) {
-//                sendMessage("Quiz has ended!");
-//                break;
-//            }
-//
-//        }
     }
 
     private static class Quiz implements Runnable{
@@ -224,6 +141,7 @@ public class Server {
 
     public static void getScore() {
         try {
+            System.out.println("\n");
             for (String users : names.keySet()) {
                 sendMessage(users + " has " + names.get(users) + " point(s)!");
                 System.out.println(users + " has " + names.get(users) + " point(s)!");
@@ -237,7 +155,6 @@ public class Server {
     private static class ClientHandler implements Runnable {
         private String name;
         private Socket clientHolder;
-        private Server serverHolder;
         ObjectInputStream reader;
         ObjectOutputStream writer;
 
@@ -289,68 +206,25 @@ public class Server {
                     sendPrivateMessage("PMessage/Please use correct syntax!/server ", this.name);
             }
 
-
-
-//                        else if (!questionSent && !message.equals("-1")) {
-//                sendMessage("Please wait until the question is shown.\n");
-//            }
-
-/*else if (message != null && message.endsWith(currentEntry.getValue().trim().toLowerCase())) {
-                // Award player
-                sendMessage(name + " had the correct answer! 1 Point awarded!");
-                System.out.println("[Server] - " + name + " had the correct answer! 1 Point awarded!");
-                names.put(name, names.get(name) + 1);
-                // Unable to get more points
-                currentEntry.setValue("waiting for next question");
-                // Update score
-                getOnlineUsers();
-            } else if (message.contains("/SCORE")) {
-                System.out.println(currentEntry.getValue());
-                getScore();
-                getOnlineUsers();
-            } else if (message.contains("/QUIT")) {
-                getScore();
-                getOnlineUsers();
-            } else if (message.contains("/DISCONNECT")) {
-                getScore();
-                getOnlineUsers();
-            }
-
-             */
         }
 
         public void run() {
             try {
-                // System.out.println("1");
                 writer.writeUTF(" Please enter your name.");
                 writer.flush();
 
-                // name = reader.readLine();
-                // Check username
-                String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"
-                        +"lmnopqrstuvwxyz!@#$%&";
                 Random rnd = new Random();
-                StringBuilder sb = new StringBuilder(4);
-                for (int i = 0; i < 4; i++)
-                    sb.append(chars.charAt(rnd.nextInt(chars.length())));
-
+                String defaultName = "client" + rnd.nextInt(200);
 
                 while (true) {
                     name = reader.readUTF();
-                    char[] abc =name.toCharArray();
-                    System.out.println("l: " + abc.length);
-                    for (int i=0; i<abc.length; i++) {
-                        System.out.println(abc);
-                    }
-                    //System.out.println("drg");
                     if (name.equals("")) {
-                        name = sb.toString();
+                        name = defaultName;
                     }
                     synchronized (names) {
                         if (!names.containsKey(name)) {
                             names.put(name, 0);
-//                            nameEntered = true;
-//                            System.out.println(nameEntered);
+
                         }
                     }
                     synchronized (namesPlaceHolder) {
@@ -361,36 +235,15 @@ public class Server {
                     }
                 }
 
-                //Server.addClientCount();
-                // System.out.println(clientCount);
-
                 sendMessage(name + " has joined the server!");
                 System.out.println(name + " has joined the server!");
 
-                // Update current online users
-                //getOnlineUsers();
 
                 // Accept messages from client and broadcast them.
                 while (true) {
                     receive();
                 }
 
-//                while (true){
-//                    Thread thread = new Thread(() -> {
-//                        try {
-//                            System.out.println("fuckkkkkkkkk");
-//                            receive();
-//                            System.out.println("noooooooooo");
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    });
-//
-//                    thread.start();
-//                    thread.join();
-//
-//                }
 
             } catch (IOException e) {
                 System.out.println(e);
