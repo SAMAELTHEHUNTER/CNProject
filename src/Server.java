@@ -276,17 +276,26 @@ public class Server {
                 String sender = extractSenderName(message);
                 String[] content = message.split(":");
                 sendPrivateMessage("PMessage/" + content[1] + "/" + sender, receiver);
+            } else if (message.equals("1") || message.equals("2") || message.equals("3") || message.equals("4")) {
+                if (message.equals(currentEntry.getValue().get(1))) {
+                    System.out.println(name + " answered correctly!");
+                    names.put(name, names.get(name) + 1);
+                }
+            } else if(message.matches("-?\\d+")) {
+                sendPrivateMessage("PMessage/ wtf /" + "server", this.name);
+            } else {
+                System.out.println(message);
+                if (!message.equals(""))
+                    sendMessage("Please use correct syntax\n");
             }
 
 
-            else if (!questionSent && !message.equals("-1")) {
-                sendMessage("Please wait until the question is shown.\n");
-            } else if (message.equals(currentEntry.getValue().get(1))) {
-                System.out.println(name + " answered correctly!");
-                //update score
-                names.put(name, names.get(name) + 1);
-            }
-            /*else if (message != null && message.endsWith(currentEntry.getValue().trim().toLowerCase())) {
+
+//                        else if (!questionSent && !message.equals("-1")) {
+//                sendMessage("Please wait until the question is shown.\n");
+//            }
+
+/*else if (message != null && message.endsWith(currentEntry.getValue().trim().toLowerCase())) {
                 // Award player
                 sendMessage(name + " had the correct answer! 1 Point awarded!");
                 System.out.println("[Server] - " + name + " had the correct answer! 1 Point awarded!");
@@ -308,12 +317,6 @@ public class Server {
             }
 
              */
-            else {
-                System.out.println(message);
-                if (!message.equals(""))
-                    sendMessage("Please use correct syntax\n");
-            }
-
         }
 
         public void run() {
@@ -324,12 +327,24 @@ public class Server {
 
                 // name = reader.readLine();
                 // Check username
+                String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"
+                        +"lmnopqrstuvwxyz!@#$%&";
+                Random rnd = new Random();
+                StringBuilder sb = new StringBuilder(4);
+                for (int i = 0; i < 4; i++)
+                    sb.append(chars.charAt(rnd.nextInt(chars.length())));
+
+
                 while (true) {
                     name = reader.readUTF();
+                    char[] abc =name.toCharArray();
+                    System.out.println("l: " + abc.length);
+                    for (int i=0; i<abc.length; i++) {
+                        System.out.println(abc);
+                    }
                     //System.out.println("drg");
-                    if (name == null) {
-//                        name = "koskhol" + clientCount;
-                        return;
+                    if (name.equals("")) {
+                        name = sb.toString();
                     }
                     synchronized (names) {
                         if (!names.containsKey(name)) {

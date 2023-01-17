@@ -31,9 +31,9 @@ public class Client implements Runnable {
                while ((userInput = scanner.readLine()) != null) {
                //while ((userInput = scanner.nextLine()) != null) {
 
-                   if (!userInput.matches("-?\\d+") || !answered){
+                   if ((!userInput.matches("1") && !userInput.matches("2") && !userInput.matches("3") && !userInput.matches("4")) || !answered){
 
-                       if (userInput.matches("-?\\d+") && !answered)
+                       if ((userInput.matches("1") || userInput.matches("2") || userInput.matches("3") || userInput.matches("4")) && !answered)
                            answered = true;
 
                        writer.writeUTF(userInput);
@@ -58,6 +58,9 @@ public class Client implements Runnable {
 
             String msg = reader.readUTF();
             System.out.println("Server :" + msg);
+
+            System.out.println(RED + "ATTENTION : If you don't have an answer for the given question, please press Enter.\n" + RESET);
+
 
             //Thread thread = new Thread(reader);
 
@@ -198,8 +201,6 @@ public class Client implements Runnable {
                     String option = options[i].substring(1, options[i].length() - 1);
                     System.out.println((i + 1) + ") " + option + "\n");
                 }
-
-                System.out.println(RED + "ATTENTION : If you don't have an answer for the given question, please press Enter.\n" + RESET);
 
 //                String userInput;
 //                while ((userInput = scanner.readLine()) != null) {
