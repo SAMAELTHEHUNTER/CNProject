@@ -15,7 +15,9 @@ public class Client implements Runnable {
     BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
     public static final String GREEN = "\033[0;32m";
     public static final String RED = "\u001B[31m";
+    public static final String YELLOW = "\u001B[33m";
     public static final String RESET = "\033[0m";
+
 
     public boolean wasAMessage = true;
     public boolean answered = false;
@@ -59,7 +61,7 @@ public class Client implements Runnable {
             String msg = reader.readUTF();
             System.out.println("Server :" + msg);
 
-            System.out.println(RED + "ATTENTION : If you don't have an answer for the given question, please press Enter.\n" + RESET);
+            System.out.println(YELLOW + "ATTENTION : If you want to be given a name by the server, simply press Enter.\n" + RESET);
 
 
             //Thread thread = new Thread(reader);
@@ -141,7 +143,10 @@ public class Client implements Runnable {
             case "PMessage":
                 String message = str[1];
                 String sender = str[2];
-                System.out.println(GREEN +  sender + "says " + message + "\n" + RESET);
+                if (sender.equals("server "))
+                    System.out.println(RED + "[Server] : " + message + RESET);
+                else
+                    System.out.println(GREEN +  sender + "says " + message + "\n" + RESET);
 
 //                try {
 //                    class sendAnswer extends Thread {

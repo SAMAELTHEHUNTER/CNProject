@@ -282,11 +282,11 @@ public class Server {
                     names.put(name, names.get(name) + 1);
                 }
             } else if(message.matches("-?\\d+")) {
-                sendPrivateMessage("PMessage/ wtf /" + "server", this.name);
+                sendPrivateMessage("PMessage/Your answer should be a number between 1 and 4!/server ", this.name);
             } else {
                 System.out.println(message);
                 if (!message.equals(""))
-                    sendMessage("Please use correct syntax\n");
+                    sendPrivateMessage("PMessage/Please use correct syntax!/server ", this.name);
             }
 
 
