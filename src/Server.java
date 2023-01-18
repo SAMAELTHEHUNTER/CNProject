@@ -155,11 +155,13 @@ public class Server {
     private static class ClientHandler implements Runnable {
         private String name;
         private Socket clientHolder;
+        private int num;
         ObjectInputStream reader;
         ObjectOutputStream writer;
 
 
         public ClientHandler(Socket socket, int count) {
+            this.num = count+1;
             this.clientHolder = socket;
             try {
                 InputStream i = clientHolder.getInputStream();
@@ -212,10 +214,7 @@ public class Server {
             try {
                 writer.writeUTF(" Please enter your name.");
                 writer.flush();
-
-                Random rnd = new Random();
-                String defaultName = "client" + rnd.nextInt(200);
-
+                String defaultName = "client" + num;
                 while (true) {
                     name = reader.readUTF();
                     if (name.equals("")) {
@@ -234,9 +233,9 @@ public class Server {
                         }
                     }
                 }
-
-                sendMessage(name + " has joined the server!");
                 System.out.println(name + " has joined the server!");
+                sendMessage(name + " has joined the server!");
+
 
 
                 // Accept messages from client and broadcast them.
