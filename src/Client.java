@@ -113,7 +113,7 @@ public class Client implements Runnable {
                 System.out.println("\nQuestion: " + question);
                 for (int i = 0; i < options.length; i++){
                     String option = options[i].substring(1, options[i].length() - 1);
-                    System.out.println((i + 1) + ") " + option);
+                    System.out.println(option + " (" + (i + 1) );
                 }
 
                 break;
