@@ -20,7 +20,7 @@ public class Client implements Runnable {
 
 
     public boolean wasAMessage = true;
-    public boolean answered = false;
+    public static boolean answered = false;
 
     public Client(){
         SetUp setUp = new SetUp();
@@ -31,7 +31,6 @@ public class Client implements Runnable {
            try {
                String userInput;
                while ((userInput = scanner.readLine()) != null) {
-               //while ((userInput = scanner.nextLine()) != null) {
 
                    if ((!userInput.matches("1") && !userInput.matches("2") && !userInput.matches("3") && !userInput.matches("4")) || !answered){
 
@@ -42,7 +41,6 @@ public class Client implements Runnable {
                        writer.flush();
                    }
 
-                   // System.out.println("echo: " + in.readLine());
                }
            } catch (IOException e) {
                e.printStackTrace();
@@ -69,18 +67,6 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
 
-    }
-
-    public static boolean isInteger(String s) {
-        try {
-            Integer.parseInt(s);
-        } catch(NumberFormatException e) {
-            return false;
-        } catch(NullPointerException e) {
-            return false;
-        }
-        // only got here if we didn't return false
-        return true;
     }
 
     @Override
@@ -134,6 +120,7 @@ public class Client implements Runnable {
 
             default:
                 System.out.println(text);
+                answered = false;
 
         }
     }

@@ -131,7 +131,7 @@ public class Server {
                 }
 
                 if (!entryIter.hasNext()) {
-                    sendMessage("Quiz has ended!");
+                    sendMessage("\nQuiz has ended!");
                     break;
                 }
 
@@ -185,7 +185,7 @@ public class Server {
 
         private void receive() throws IOException {
             String message = reader.readUTF();
-            System.out.println("masage:  " + message);
+
             if (message == null) {
                 return;
             }
@@ -194,8 +194,12 @@ public class Server {
                 String receiver = extractReceiverName(message);
                 String sender = extractSenderName(message);
                 String[] content = message.split(":");
+                System.out.println("\n" + message);
                 sendPrivateMessage("PMessage/" + content[1] + "/" + sender, receiver);
-            } else if (message.equals("1") || message.equals("2") || message.equals("3") || message.equals("4")) {
+            }
+            else if (!questionSent)
+                sendPrivateMessage("PMessage/Please wait until a question is shown!/server ", this.name);
+                else if (message.equals("1") || message.equals("2") || message.equals("3") || message.equals("4")) {
                 if (message.equals(currentEntry.getValue().get(1))) {
                     System.out.println(name + " answered correctly!");
                     names.put(name, names.get(name) + 1);
@@ -203,7 +207,7 @@ public class Server {
             } else if(message.matches("-?\\d+")) {
                 sendPrivateMessage("PMessage/Your answer should be a number between 1 and 4!/server ", this.name);
             } else {
-                System.out.println(message);
+               // System.out.println(message);
                 if (!message.equals(""))
                     sendPrivateMessage("PMessage/Please use correct syntax!/server ", this.name);
             }
