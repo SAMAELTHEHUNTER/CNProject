@@ -36,7 +36,7 @@ public class Client implements Runnable {
 
                        writer.writeUTF(userInput);
                        writer.flush();
-                   }
+                   }else System.out.println(RED + "You've already given your answer for this question!\n" + RESET);
 
                }
            } catch (IOException e) {
