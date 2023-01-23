@@ -11,15 +11,12 @@ public class Client implements Runnable {
     String serverAddress = "127.0.0.1";
     ObjectInputStream reader;
     ObjectOutputStream writer;
-    //Scanner scanner = new Scanner(System.in);
     BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
     public static final String GREEN = "\033[0;32m";
     public static final String RED = "\u001B[31m";
     public static final String YELLOW = "\u001B[33m";
     public static final String RESET = "\033[0m";
 
-
-    public boolean wasAMessage = true;
     public static boolean answered = false;
 
     public Client(){

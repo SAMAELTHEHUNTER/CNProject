@@ -11,7 +11,6 @@ public class Server {
     private static Map<String, ArrayList<String>> qoMap = new HashMap<>();
     private static Iterator<Map.Entry<String, ArrayList<String>>> entryIter = null;
     private static Map.Entry<String, ArrayList<String>> currentEntry;
-    private static ArrayList<Integer> answers = new ArrayList<>();
     private static ServerSocket listener;
     private static int S_PORT;
     private static int clientCount = 0;
@@ -94,7 +93,6 @@ public class Server {
     private static void startQuiz() throws InterruptedException {
         SetUp newGame = new SetUp();
         qoMap = newGame.loadQuestions();
-        answers = newGame.getAnswers();
 
         Thread qthread = new Thread(new Quiz());
         qthread.start();
@@ -172,7 +170,6 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //start();
         }
 
         private String extractReceiverName(String input) {
