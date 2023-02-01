@@ -1,42 +1,32 @@
 [
     {
-        "question": "چند زمین می‌تواند درون خورشید جا بگیرد؟",
+        "question": "Who was the first woman pilot to fly solo across the Atlantic?",
         "options": [
-            "1 میلیون",
-            "2 میلیون",
-            "3 میلیون",
-            "1.3 میلیون"
+            "Raymonde de Laroche",
+            "Kimberly Anyadike",
+            "Zoya Agarwal",
+            "Amelia Earhart"
         ],
         "answer": 4
     },
     {
-        "question": "در طول تاریخ چه تعداد از جملات نمایشنامه‌های شکسپیر توسط زنان خوانده شده است؟",
+        "question": "What is cynophobia?",
         "options": [
-            "17%",
-            "20%",
-            "33%",
-            "52%"
-        ],
-        "answer": 1
-    },
-    {
-        "question": "کدام کشور بیشترین سرانه مصرف شکلات را در جهان دارد؟",
-        "options": [
-            "ایران",
-            "سوییس",
-            "برزیل",
-            "آمریکا"
+            "fear of cats",
+            "fear of dogs",
+            "fear of spiders",
+            "fear of snakes"
         ],
         "answer": 2
     },
     {
-        "question": "کوچک‌ترین استخوان بدن انسان چه نام دارد و در کجای بدن قرار گرفته است؟",
+        "question": "How many languages are written from right to left?",
         "options": [
-            "ترقوه",
-            "کشکک",
-            "رکابی",
-            "بینی"
+            "12",
+            "30",
+            "18",
+            "52"
         ],
-        "answer": 3
+        "answer": 1
     }
 ]
